@@ -10,7 +10,9 @@ nix run github:M4jor-Tom/pi-power-dev.app
 
 On first run it clones the profile to `~/.pi-power-dev`. On later runs it
 fast-forwards that clone, but only when the tree is clean — local edits are
-never clobbered. Override the location with `PI_POWER_DEV_DIR`.
+never clobbered — and only when `origin` still points at this profile's own
+repo, so pointing `PI_POWER_DEV_DIR` at a fork or an unrelated checkout gets
+no pulls. Override the location with `PI_POWER_DEV_DIR`.
 
 This app is a convenience, not a requirement. The profile works on its own:
 
