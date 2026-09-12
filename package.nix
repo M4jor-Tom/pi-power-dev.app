@@ -58,8 +58,12 @@ writeShellApplication {
     if [ ! -e "$DIR" ]; then
       echo "${profileName}: cloning ${configRepo} -> $DIR" >&2
       git clone "${configRepo}" "$DIR"
-    elif [ -d "$DIR/.git" ] && [ -z "$(git -C "$DIR" status --porcelain)" ]; then
-      # Clean tree only. A dirty tree keeps its local edits, always.
+    elif [ -d "$DIR/.git" ] \
+      && [ "$(git -C "$DIR" remote get-url origin 2>/dev/null)" = "${configRepo}" ] \
+      && [ -z "$(git -C "$DIR" status --porcelain)" ]; then
+      # Clean tree, and only a checkout of this profile's own repo. A dirty
+      # tree keeps its local edits, always; an unrelated checkout is never
+      # touched.
       git -C "$DIR" pull --ff-only --quiet \
         || echo "${profileName}: pull failed, using the local checkout" >&2
     fi

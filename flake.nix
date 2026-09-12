@@ -37,10 +37,12 @@
           default = {
             type = "app";
             program = "${pkgs.pi-power-dev}/bin/pi-power-dev";
+            meta.description = "pi coding agent running the pi-power-dev profile";
           };
           pi-power-dev = {
             type = "app";
             program = "${pkgs.pi-power-dev}/bin/pi-power-dev";
+            meta.description = "pi coding agent running the pi-power-dev profile";
           };
         };
 
