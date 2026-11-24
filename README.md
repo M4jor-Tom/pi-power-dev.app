@@ -20,6 +20,33 @@ This app is a convenience, not a requirement. The profile works on its own:
 PI_CODING_AGENT_DIR=~/.pi-power-dev pi
 ```
 
+## Local models with Ollama
+
+The default `nix run .` and `nix run .#pi-power-dev` do not start or configure
+Ollama. Two opt-in apps each need just one terminal:
+
+```bash
+nix run .#ollama                          # choose “Chat with a model” in the menu
+nix run .#ollama -- pull qwen2.5:3b        # or download an exact tag and exit
+nix run .#pi-with-ollama                   # open Pi; choose pi-ollama in /model
+```
+
+Each starts a background Ollama server on its own loopback port and stops it
+when the foreground app closes. Neither connects to or stops a system Ollama.
+Model downloads persist. If you download a model while Pi is open, use `/reload`
+then `/model`. The launcher adds a provider but doesn't change your Pi default.
+For a private document, explicitly select the local model before entering text:
+
+```bash
+nix run .#pi-with-ollama -- --model pi-ollama/qwen2.5:3b --no-session
+```
+
+Ollama uses its normal `~/.ollama/models` store. If another installation uses
+a different directory (the NixOS service normally uses `/var/lib/ollama/models`),
+set `OLLAMA_MODELS` to that directory **when launching either app** and ensure
+your user has access. No models are copied; removing a shared model affects both
+installations. Avoid concurrent pulls or deletes against the same store.
+
 ## What it ships
 
 `pi-coding-agent git gh glab nodejs bun ripgrep fd jq yq-go uv python3 rtk
